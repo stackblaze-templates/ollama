@@ -2,9 +2,18 @@ services:
   ollama:
     image: ollama/ollama:latest
     ports:
-      - "11434:11434"
+      # Bind to localhost only — remove 127.0.0.1: prefix only if you have
+      # a network-level control (firewall/VPN) protecting access.
+      - "127.0.0.1:11434:11434"
     volumes:
-      - ollama_data:/root/.ollama
+      - ollama_data:/home/ollama/.ollama
+    environment:
+      # 0.0.0.0 is required so the containerised process listens on all
+      # container interfaces and the port binding above can forward traffic.
+      # External access is still limited by the 127.0.0.1 binding above.
+      - OLLAMA_HOST=0.0.0.0
+    security_opt:
+      - no-new-privileges:true
 
 volumes:
   ollama_data:
