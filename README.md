@@ -89,6 +89,17 @@ flowchart LR
 
 ---
 
+## Security Considerations
+
+> **⚠️ Ollama has no built-in authentication.** The API on port 11434 is unauthenticated by default. Anyone who can reach that port can run models and consume resources.
+
+- **Do not expose port 11434 directly to the public internet.** Place a reverse proxy (e.g. nginx, Caddy) with authentication in front of Ollama if remote access is required.
+- **Restrict allowed origins** with the `OLLAMA_ORIGINS` environment variable if you embed Ollama in a web application (default allows all origins when accessed locally).
+- **Network binding**: the `docker-compose.yml` in this template binds the API port to `127.0.0.1` (localhost only). Remove the `127.0.0.1:` prefix only if you have a firewall or other network-level control in place.
+- **Non-root container**: the `Dockerfile` creates a dedicated `ollama` user so the process does not run as root inside the container.
+
+---
+
 ### Maintained by [StackBlaze](https://stackblaze.com)
 
 This template is actively maintained by StackBlaze. We perform **weekly automated checks** to ensure:
